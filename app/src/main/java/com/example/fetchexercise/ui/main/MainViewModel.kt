@@ -17,23 +17,24 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             // request JSON
             val rawJson = URL("https://hiring.fetch.com/hiring.json").readText()
-            val unsortedList = Json.decodeFromString<List<Item>>(rawJson)
+            // parse JSON data into a list of our data class items, filtering
+            // any items with a blank or null name property
+            val jsonList = Json.decodeFromString<List<Item>>(rawJson)
+                .filter { (it.name != null) and (it.name != "") }
+            //    .sortedWith( compareBy<Item> { it.listId }.thenBy { it.name } )
+            // if I wasn't using a map to subdivide each list for display,
+            // line 23 could be uncommented and used to sort the list in the requested order
+
             val tmpMap = mutableMapOf<Int, ArrayList<Item>>()
 
-//            ArrayList(unsortedList.sortedWith(
-//                compareBy<ListItem> { it.listId }.thenBy { it.name }
-//            ).filter { (it.name != null) and (it.name != "") })
-
-            for (i in unsortedList) {
-                // ignore items with blank or null name
-                if ((i.name != null) and (i.name != "")) {
-                    // if list doesn't exist, create empty list
-                    if (tmpMap[i.listId] == null) {
-                        tmpMap[i.listId] = ArrayList()
-                    }
-                    // append item to the list
-                    tmpMap[i.listId]?.add(i)
+            // iterate through the list
+            for (i in jsonList) {
+                // if a list doesn't exist at the specified key, initialize empty list
+                if (tmpMap[i.listId] == null) {
+                    tmpMap[i.listId] = ArrayList()
                 }
+                // append item to the list at the specified key
+                tmpMap[i.listId]?.add(i)
             }
 
             mutableState.value = mutableState.value.copy(

@@ -12,6 +12,7 @@ import com.example.fetchexercise.ui.theme.FetchExerciseTheme
 
 class MainActivity : ComponentActivity() {
 
+    // Initialize MainViewModel
     private val mainViewModel: MainViewModel = MainViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {

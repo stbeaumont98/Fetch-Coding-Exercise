@@ -36,12 +36,12 @@ fun MainScreen(state: MainState) {
                 }
 
                 // Sorting by "name" produces results in non-numerical order.
-                // For example, a list might appear as such:
-                // [Item 1, Item 101, Item 12, Item 2, Item 291, Item 3, Item 31, ...]
-                // Since the number in the name corresponds to it's id, I've opted
-                // to sort by id; however, you could easily change the line below to use
-                // "it.name" if the list needs to be sorted alphabetically (or the previously
-                // described behavior is desired).
+                // For example, a list might appear in the following order:
+                // [Item 1, Item 101, Item 12, Item 2, Item 291, Item 3, Item 31]
+                // Since the number in the name corresponds to its id, I've opted
+                // to sort by id; however, you could easily change "it.id" in the
+                // line below to "it.name" if the list needs to be sorted
+                // alphabetically (or the previously described behavior is desired).
                 items(list.sortedBy { it.id }) { i ->
                     ListItem(i)
                 }
